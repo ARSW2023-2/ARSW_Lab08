@@ -8,6 +8,7 @@ var app = (function () {
     }
     
     var stompClient = null;
+    var dibujoId = null;
 
     var addPointToCanvas = function (point) {        
         var canvas = document.getElementById("canvas");
@@ -28,7 +29,7 @@ var app = (function () {
     };
 
 
-    var connectAndSubscribe = function () {
+    var connectAndSubscribe = function (dibujoId) {
         console.info('Connecting to WS...');
         var socket = new SockJS('/stompendpoint');
         stompClient = Stomp.over(socket);
@@ -36,7 +37,7 @@ var app = (function () {
         //subscribe to /topic/TOPICXX when connections succeed
         stompClient.connect({}, function (frame) {
             console.log('Connected: ' + frame);
-            stompClient.subscribe('/topic/newpoint', function (eventbody) {
+            stompClient.subscribe('/topic/newpoint' + dibujoId, function (eventbody) {
                 let  jsonObj = JSON.parse(eventbody.body);
                 //alert("Cordenadas recibidas: " + jsonObj.x + ", " + jsonObj.y); 
                 addPointToCanvas(new Point(jsonObj.x, jsonObj.y));
@@ -67,17 +68,29 @@ var app = (function () {
             }
             
             //websocket connection
-            connectAndSubscribe();
+            //connectAndSubscribe();
+            dibujoId = parseInt(document.getElementById("dibujoId").value);
+            if(isNaN(dibujoId)){
+                alert("El id del dibujo debe ser un numero");
+            }else{
+                alert("El id del dibujo es: " + dibujoId);
+                can.getContext("2d").clearRect(0, 0, 800, 600);
+                connectAndSubscribe(dibujoId);
+            }
         },
 
         publishPoint: function(px,py){
-            var pt=new Point(px,py);
-            console.info("publishing point at "+pt);
-            //addPointToCanvas(pt);
+            if(dibujoId==null){
+                alert("Debe seleccionar un dibujo");
+            }else{
+                var pt=new Point(px,py);
+                console.info("publishing point at "+pt);
+                //addPointToCanvas(pt);
 
-            //publicar el evento
-            //creando un objeto literal
-            stompClient.send("/topic/newpoint", {}, JSON.stringify(pt));
+                //publicar el evento
+                //creando un objeto literal
+                stompClient.send("/topic/newpoint" + dibujoId, {}, JSON.stringify(pt));
+            }
         },
 
         disconnect: function () {

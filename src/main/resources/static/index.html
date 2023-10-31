@@ -30,7 +30,13 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
     
-    <body onload="app.init()">
+    <body>
+        <a>Ingrese el ID del dibujo:
+        <input id="dibujoId" type="number" placeholder="Numero del dibujo" required="true"/>
+        <button onclick="app.init()">Conectarse</button>
+        </a>
+        <br>
+        <br>
         X:<input id="x" type="number" required/>
         Y:<input id="y" type="number" required/>        
         <button onclick="app.publishPoint($('#x').val(),$('#y').val())">Send point</button>
