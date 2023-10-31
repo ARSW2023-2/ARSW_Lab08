@@ -17,22 +17,25 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 -->
 <html>
     <head>
-        <title>TODO supply a title</title>
+        <title>LAB-08</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <script src="/webjars/jquery/jquery.min.js"></script>
-        <script src="/webjars/sockjs-client/sockjs.min.js"></script>
-        <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+        <script src="/webjars/jquery/3.7.1/jquery.min.js"></script>
+        <script src="/webjars/sockjs-client/1.0.2/sockjs.min.js"></script>
+        <script src="/webjars/stomp-websocket/2.3.3/stomp.min.js"></script>
         <script src="/app.js"></script>
+        <link rel="stylesheet" href="/styles.css">
 
     </head>
 
 
     
     <body onload="app.init()">
-        X:<input id="x" type="number"/>
-        Y:<input id="y" type="number"/>        
+        X:<input id="x" type="number" required/>
+        Y:<input id="y" type="number" required/>        
         <button onclick="app.publishPoint($('#x').val(),$('#y').val())">Send point</button>
+        <br>
+        <br>
         <canvas id="canvas" width="800" height="600"></canvas>
     </body>
 </html>
